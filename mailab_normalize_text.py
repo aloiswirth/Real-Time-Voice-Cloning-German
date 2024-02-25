@@ -19,17 +19,23 @@ if __name__ == "__main__":
 	wav_folders = []
 	
 	print("Searching speakers...")
+	if args.datasets_root is None:
+		data_root = "/home/alois/Documents/development/Datasets/de_DE/"
+	else:
+		data_root = args.datasets_root
 
 	# list female speakers
-	speaker_search_dir_female = os.path.join(args.datasets_root, "by_book\\female\\*\\")
+	speaker_search_dir_female = os.path.join(data_root, "by_book/female/*/")
+	print(f'female speaker search dir: {speaker_search_dir_female}')
 	female_speaker_dirs = glob(speaker_search_dir_female)
 	
 	# list male speakers
-	speaker_search_dir_male = os.path.join(args.datasets_root, "by_book\\male\\*\\")
+	speaker_search_dir_male = os.path.join(data_root, "by_book/male/*/")
+	print(f'male speaker search dir: {speaker_search_dir_male}')
 	male_speaker_dirs = glob(speaker_search_dir_male)
 	
 	# list mixed speakers
-	speaker_search_dir_mix = os.path.join(args.datasets_root, "by_book\\mix\\*\\")
+	speaker_search_dir_mix = os.path.join(data_root, "by_book/mix/*/")
 	mix_speaker_dirs = glob(speaker_search_dir_mix)
 	
 	all_speakers = female_speaker_dirs + male_speaker_dirs + mix_speaker_dirs
@@ -39,7 +45,7 @@ if __name__ == "__main__":
 	print("Checking subfolders...")
 	for speaker in all_speakers:
 		# get subfolders
-		speaker_subfolders_search_dir = os.path.join(speaker, "*\\")
+		speaker_subfolders_search_dir = os.path.join(speaker, "*/")
 		#print(speaker_subfolders_search_dir)
 		speaker_subfolders = glob(speaker_subfolders_search_dir)
 		#print(speaker_subfolders)
@@ -52,7 +58,7 @@ if __name__ == "__main__":
 				wav_folders.append(speaker_subfolder)
 			else:
 				# traverse further dirs
-				speaker_subfolders_books_search_dir = os.path.join(speaker_subfolder, "*\\")
+				speaker_subfolders_books_search_dir = os.path.join(speaker_subfolder, "*/")
 				speaker_subfolders_books_dirs = glob(speaker_subfolders_books_search_dir)
 				#print(speaker_subfolders_books_dirs)
 				for speaker_subfolders_book in speaker_subfolders_books_dirs:
