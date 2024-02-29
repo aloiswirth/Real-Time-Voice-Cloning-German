@@ -2,9 +2,10 @@ from encoder.preprocess import preprocess_librispeech, preprocess_voxceleb1, pre
 from utils.argutils import print_args
 from pathlib import Path
 import argparse
+import webrtcvad
 
 import sys
-print(sys-version)
+print(sys.version)
 
 if __name__ == "__main__":
     class MyFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
@@ -27,7 +28,8 @@ if __name__ == "__main__":
         formatter_class=MyFormatter
     )
     parser.add_argument("datasets_root", type=Path, help=\
-        "Path to the directory containing your LibriSpeech/TTS and VoxCeleb datasets.")
+        "Path to the directory containing your LibriSpeech/TTS and VoxCeleb datasets.",
+                        default="/home/alois/Documents/development/Datasets/")
     parser.add_argument("-o", "--out_dir", type=Path, default=argparse.SUPPRESS, help=\
         "Path to the output directory that will contain the mel spectrograms. If left out, "
         "defaults to <datasets_root>/SV2TTS/encoder/")
@@ -57,7 +59,9 @@ if __name__ == "__main__":
     args.datasets = args.datasets.split(",")
     if not hasattr(args, "out_dir"):
         args.out_dir = args.datasets_root.joinpath("SV2TTS", "encoder")
-    assert args.datasets_root.exists()
+    print(args.datasets_root)
+    print(args.datasets_root.exists())
+    # assert args.datasets_root.exists()
     args.out_dir.mkdir(exist_ok=True, parents=True)
 
     # Preprocess the datasets
@@ -68,7 +72,10 @@ if __name__ == "__main__":
         "voxceleb2": preprocess_voxceleb2,
 		"m-ailabs": preprocess_mailabs,
     }
+    print(f'the args are {args}')
     args = vars(args)
+    print(f' the var(args) are {args}')
     for dataset in args.pop("datasets"):
+        print(dataset, flush = True)
         print("Preprocessing %s" % dataset)
         preprocess_func[dataset](**args)

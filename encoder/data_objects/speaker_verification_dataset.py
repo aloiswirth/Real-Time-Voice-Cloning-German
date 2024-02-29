@@ -26,6 +26,7 @@ class SpeakerVerificationDataset(Dataset):
     def get_logs(self):
         log_string = ""
         for log_fpath in self.root.glob("*.txt"):
+            print(log_fpath)
             if log_fpath.exists():
                 with log_fpath.open("r") as log_file:
                     log_string += "".join(log_file.readlines())

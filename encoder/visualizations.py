@@ -1,3 +1,9 @@
+import os
+
+# Add the path to the PATH environment variable
+new_path = "/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German"
+os.environ["PATH"] += os.pathsep + new_path
+
 from encoder.data_objects.speaker_verification_dataset import SpeakerVerificationDataset
 from datetime import datetime
 from time import perf_counter as timer
@@ -5,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 # import webbrowser
 import visdom
-import umap
+import umap.umap_ as umap
 
 colormap = np.array([
     [76, 255, 0],
@@ -21,7 +27,7 @@ colormap = np.array([
     [33, 0, 127],
     [0, 0, 0],
     [183, 183, 183],
-], dtype=np.float) / 255 
+], dtype=float) / 255 
 
 
 class Visualizations:
