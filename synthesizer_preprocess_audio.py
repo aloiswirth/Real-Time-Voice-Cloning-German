@@ -1,3 +1,7 @@
+
+import sys
+if sys.path[0] != "/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German/syntheseizer":
+    sys.path.append("/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German/syntheseizer")
 from synthesizer.preprocess import preprocess_dataset
 from synthesizer.hparams import hparams
 from utils.argutils import print_args
@@ -41,7 +45,8 @@ if __name__ == "__main__":
         args.out_dir = args.datasets_root.joinpath("SV2TTS", "synthesizer")
 
     # Create directories
-    assert args.datasets_root.exists()
+    print(args.datasets_root)
+    # assert args.datasets_root.exists()
     args.out_dir.mkdir(exist_ok=True, parents=True)
 
     # Verify webrtcvad is available

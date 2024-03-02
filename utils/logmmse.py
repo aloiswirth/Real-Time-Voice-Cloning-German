@@ -44,7 +44,7 @@ def profile_noise(noise, sampling_rate, window_size=0):
     :return: a NoiseProfile object
     """
     noise, dtype = to_float(noise)
-    noise += np.finfo(np.float64).eps
+    noise += np.finfo(float64).eps
 
     if window_size == 0:
         window_size = int(math.floor(0.02 * sampling_rate))
@@ -83,7 +83,7 @@ def denoise(wav, noise_profile: NoiseProfile, eta=0.15):
     :return: the clean wav as a numpy array of floats or ints of the same length.
     """
     wav, dtype = to_float(wav)
-    wav += np.finfo(np.float64).eps
+    wav += np.finfo(float64).eps
     p = noise_profile
     
     nframes = int(math.floor(len(wav) / p.len2) - math.floor(p.window_size / p.len2))
@@ -150,7 +150,7 @@ def denoise(wav, noise_profile: NoiseProfile, eta=0.15):
 #     Set to 0 to disable updating the noise profile.
 #     """
 #     wav, dtype = to_float(wav)
-#     wav += np.finfo(np.float64).eps
+#     wav += np.finfo(float64).eps
 #     
 #     if window_size == 0:
 #         window_size = int(math.floor(0.02 * sampling_rate))
@@ -173,10 +173,10 @@ def denoise(wav, noise_profile: NoiseProfile, eta=0.15):
 #     noise_mu2 = (wav_mean / n_frames) ** 2
 #     
 #     wav, dtype = to_float(wav)
-#     wav += np.finfo(np.float64).eps
+#     wav += np.finfo(float64).eps
 #     
 #     nframes = int(math.floor(len(wav) / len2) - math.floor(window_size / len2))
-#     vad = np.zeros(nframes * len2, dtype=np.bool)
+#     vad = np.zeros(nframes * len2, dtype=bool)
 # 
 #     aa = 0.98
 #     mu = 0.98
@@ -219,10 +219,10 @@ def denoise(wav, noise_profile: NoiseProfile, eta=0.15):
 
 
 def to_float(_input):
-    if _input.dtype == np.float64:
+    if _input.dtype == float64:
         return _input, _input.dtype
-    elif _input.dtype == np.float32:
-        return _input.astype(np.float64), _input.dtype
+    elif _input.dtype == float32:
+        return _input.astype(float64), _input.dtype
     elif _input.dtype == np.uint8:
         return (_input - 128) / 128., _input.dtype
     elif _input.dtype == np.int16:
@@ -233,10 +233,10 @@ def to_float(_input):
 
 
 def from_float(_input, dtype):
-    if dtype == np.float64:
-        return _input, np.float64
-    elif dtype == np.float32:
-        return _input.astype(np.float32)
+    if dtype == float64:
+        return _input, float64
+    elif dtype == float32:
+        return _input.astype(float32)
     elif dtype == np.uint8:
         return ((_input * 128) + 128).astype(np.uint8)
     elif dtype == np.int16:

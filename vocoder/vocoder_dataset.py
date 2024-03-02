@@ -25,7 +25,7 @@ class VocoderDataset(Dataset):
         mel_path, wav_path = self.samples_fpaths[index]
         
         # Load the mel spectrogram and adjust its range to [-1, 1]
-        mel = np.load(mel_path).T.astype(np.float32) / hp.mel_max_abs_value
+        mel = np.load(mel_path).T.astype(float32) / hp.mel_max_abs_value
         
         # Load the wav
         wav = np.load(wav_path)
@@ -49,7 +49,7 @@ class VocoderDataset(Dataset):
         elif hp.voc_mode == 'MOL':
             quant = audio.float_2_label(wav, bits=16)
             
-        return mel.astype(np.float32), quant.astype(np.int64)
+        return mel.astype(float32), quant.astype(np.int64)
 
     def __len__(self):
         return len(self.samples_fpaths)
@@ -65,7 +65,7 @@ def collate_vocoder(batch):
 
     labels = [x[1][sig_offsets[i]:sig_offsets[i] + hp.voc_seq_len + 1] for i, x in enumerate(batch)]
 
-    mels = np.stack(mels).astype(np.float32)
+    mels = np.stack(mels).astype(float32)
     labels = np.stack(labels).astype(np.int64)
 
     mels = torch.tensor(mels)

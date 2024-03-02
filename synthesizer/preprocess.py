@@ -1,16 +1,29 @@
+import sys
+
+
+
 from multiprocessing.pool import Pool 
+if sys.path[0] == "/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German/syntheseizer":
+    sys.path.pop(0)
+from utils import logmmse
+if sys.path[0] != "/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German/syntheseizer":
+    sys.path.append("/home/alois/Documents/development/github/Real-Time-Voice-Cloning-German/syntheseizer")
+
+from synthesizer import audio
 from synthesizer import audio
 from functools import partial
 from itertools import chain
 from encoder import inference as encoder
 from pathlib import Path
-from utils import logmmse
+
 from tqdm import tqdm
 import numpy as np
 import librosa
 import os
 from glob import glob
-
+import sys
+sys.path.append('/home/alois/Documents/development/github/')
+from synthesizer import audio
 
 def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
                            skip_existing: bool, hparams, no_alignments: bool,
@@ -19,7 +32,7 @@ def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
     dataset_root = datasets_root.joinpath(datasets_name)
     input_dirs = [dataset_root.joinpath(subfolder.strip()) for subfolder in subfolders.split(",")]
     print("\n    ".join(map(str, ["Using data from:"] + input_dirs)))
-    assert all(input_dir.exists() for input_dir in input_dirs)
+    # assert all(input_dir.exists() for input_dir in input_dirs)
     
     # Create the output directories for each output file type
     out_dir.joinpath("mels").mkdir(exist_ok=True)
@@ -27,19 +40,28 @@ def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
     
     # Create a metadata file
     metadata_fpath = out_dir.joinpath("train.txt")
-    metadata_file = metadata_fpath.open("a" if skip_existing else "w", encoding="utf-8")
+    # metadata_file = metadata_fpath.open("a" if skip_existing else "w", encoding="utf-8")
 
     # Preprocess the dataset
     speaker_dirs = list(chain.from_iterable(input_dir.glob("*") for input_dir in input_dirs))
     print("Speaker dirs: " + str(speaker_dirs))
-    func = partial(preprocess_speaker, out_dir=out_dir, skip_existing=skip_existing, 
-                   hparams=hparams, no_alignments=no_alignments, wav_dir=wav_dir)
-    job = Pool(n_processes).imap(func, speaker_dirs)
-    for speaker_metadata in tqdm(job, datasets_name, len(speaker_dirs), unit="speakers"):
-        print("Speaker metadata: " + str(speaker_metadata))
-        for metadatum in speaker_metadata:
+    # func = partial(preprocess_speaker, out_dir=out_dir, skip_existing=skip_existing, 
+    #                hparams=hparams, no_alignments=no_alignments, wav_dir=wav_dir)
+    # job = Pool(n_processes).imap(func, speaker_dirs)
+    for speaker_dir in speaker_dirs:
+        speaker_metadata_aw =  preprocess_speaker(speaker_dir, 
+                        out_dir=out_dir,
+                        skip_existing=skip_existing,
+                        hparams=hparams, 
+                        no_alignments=no_alignments, 
+                        wav_dir=wav_dir)
+
+    # for speaker_metadata in tqdm(job, datasets_name, len(speaker_dirs), unit="speakers"):
+        metadata_file = metadata_fpath.open("a" if skip_existing else "w", encoding="utf-8")
+        print("Speaker metadata: " + str(speaker_metadata_aw))
+        for metadatum in speaker_metadata_aw:
             metadata_file.write("|".join(str(x) for x in metadatum) + "\n")
-    metadata_file.close()
+        metadata_file.close()
 
     # Verify the contents of the metadata file
     print("Medata file: " + str(metadata_fpath))
@@ -58,7 +80,7 @@ def preprocess_dataset(datasets_root: Path, out_dir: Path, n_processes: int,
 
 def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams, no_alignments: bool, wav_dir: bool):
     metadata = []
-    for book_dir in speaker_dir.glob("*\\"):
+    for book_dir in speaker_dir.glob("*"):
         if not os.path.isdir(book_dir):
             print("" + str(book_dir) + " is not a directory.")
             continue
@@ -68,7 +90,7 @@ def preprocess_speaker(speaker_dir, out_dir: Path, skip_existing: bool, hparams,
             # Gather the utterance audios and texts
             # LibriTTS uses .wav but we will include extensions for compatibility with other datasets
             if wav_dir:
-                extensions = ["wavs\\*.wav", "wavs\\*.flac", "wavs\\*.mp3"]
+                extensions = ["wavs/*.wav", "wavs/*.flac", "wavs/*.mp3"]
             else:
                 extensions = ["*.wav", "*.flac", "*.mp3"]
             for extension in extensions:
@@ -232,7 +254,7 @@ def process_utterance(wav: np.ndarray, text: str, out_dir: Path, basename: str,
         return None
     
     # Compute the mel spectrogram
-    mel_spectrogram = audio.melspectrogram(wav, hparams).astype(np.float32)
+    mel_spectrogram = audio.melspectrogram(wav, hparams).astype(float32)
     mel_frames = mel_spectrogram.shape[1]
     
     # Skip utterances that are too long

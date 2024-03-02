@@ -235,7 +235,7 @@ class WaveRNN(nn.Module):
 
         output = torch.stack(output).transpose(0, 1)
         output = output.cpu().numpy()
-        output = output.astype(np.float64)
+        output = output.astype(float64)
         
         if batched:
             output = self.xfade_and_unfold(output, target, overlap)
@@ -344,13 +344,13 @@ class WaveRNN(nn.Module):
         Args:
             y (ndarry)    : Batched sequences of audio samples
                             shape=(num_folds, target + 2 * overlap)
-                            dtype=np.float64
+                            dtype=float64
             overlap (int) : Timesteps for both xfade and rnn warmup
 
         Return:
             (ndarry) : audio samples in a 1d array
                        shape=(total_len)
-                       dtype=np.float64
+                       dtype=float64
 
         Details:
             y = [[seq1],
@@ -376,10 +376,10 @@ class WaveRNN(nn.Module):
         # Need some silence for the rnn warmup
         silence_len = overlap // 2
         fade_len = overlap - silence_len
-        silence = np.zeros((silence_len), dtype=np.float64)
+        silence = np.zeros((silence_len), dtype=float64)
 
         # Equal power crossfade
-        t = np.linspace(-1, 1, fade_len, dtype=np.float64)
+        t = np.linspace(-1, 1, fade_len, dtype=float64)
         fade_in = np.sqrt(0.5 * (1 + t))
         fade_out = np.sqrt(0.5 * (1 - t))
 
@@ -391,7 +391,7 @@ class WaveRNN(nn.Module):
         y[:, :overlap] *= fade_in
         y[:, -overlap:] *= fade_out
 
-        unfolded = np.zeros((total_len), dtype=np.float64)
+        unfolded = np.zeros((total_len), dtype=float64)
 
         # Loop to add up all the samples
         for i in range(num_folds):

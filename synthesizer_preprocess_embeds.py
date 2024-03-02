@@ -2,6 +2,7 @@ from synthesizer.preprocess import create_embeddings
 from utils.argutils import print_args
 from pathlib import Path
 import argparse
+from synthesizer.preprocess import create_embeddings
 
 
 if __name__ == "__main__":

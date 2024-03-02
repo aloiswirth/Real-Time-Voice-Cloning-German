@@ -62,7 +62,7 @@ def wav_to_mel_spectrogram(wav):
         hop_length=int(sampling_rate * mel_window_step / 1000),
         n_mels=mel_n_channels
     )
-    return frames.astype(np.float32).T
+    return frames.astype(float32).T
 
 
 def trim_long_silences(wav):

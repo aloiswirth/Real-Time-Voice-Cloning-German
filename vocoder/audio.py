@@ -21,7 +21,7 @@ def load_wav(path) :
 
 
 def save_wav(x, path) :
-    sf.write(path, x.astype(np.float32), hp.sample_rate)
+    sf.write(path, x.astype(float32), hp.sample_rate)
 
 
 def split_signal(x) :

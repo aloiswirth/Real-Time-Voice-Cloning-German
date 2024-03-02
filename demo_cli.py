@@ -215,7 +215,7 @@ if __name__ == '__main__':
             # Save it on the disk
             filename = "demo_output_%02d.wav" % num_generated
             print(generated_wav.dtype)
-            sf.write(filename, generated_wav.astype(np.float32), synthesizer.sample_rate)
+            sf.write(filename, generated_wav.astype(float32), synthesizer.sample_rate)
             num_generated += 1
             print("\nSaved output as %s\n\n" % filename)
             
