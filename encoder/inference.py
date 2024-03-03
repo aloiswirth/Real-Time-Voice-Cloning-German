@@ -44,9 +44,9 @@ def embed_frames_batch(frames_batch):
     """
     Computes embeddings for a batch of mel spectrogram.
     
-    :param frames_batch: a batch mel of spectrogram as a numpy array of float32 of shape 
+    :param frames_batch: a batch mel of spectrogram as a numpy array of np.float32 of shape 
     (batch_size, n_frames, n_channels)
-    :return: the embeddings as a numpy array of float32 of shape (batch_size, model_embedding_size)
+    :return: the embeddings as a numpy array of np.float32 of shape (batch_size, model_embedding_size)
     """
     if _model is None:
         raise Exception("Model was not loaded. Call load_model() before inference.")
@@ -113,7 +113,7 @@ def embed_utterance(wav, using_partials=True, return_partials=False, **kwargs):
     Computes an embedding for a single utterance.
     
     # TODO: handle multiple wavs to benefit from batching on GPU
-    :param wav: a preprocessed (see audio.py) utterance waveform as a numpy array of float32
+    :param wav: a preprocessed (see audio.py) utterance waveform as a numpy array of np.float32
     :param using_partials: if True, then the utterance is split in partial utterances of 
     <partial_utterance_n_frames> frames and the utterance embedding is computed from their 
     normalized average. If False, the utterance is instead computed from feeding the entire 
@@ -121,8 +121,8 @@ def embed_utterance(wav, using_partials=True, return_partials=False, **kwargs):
     :param return_partials: if True, the partial embeddings will also be returned along with the 
     wav slices that correspond to the partial embeddings.
     :param kwargs: additional arguments to compute_partial_splits()
-    :return: the embedding as a numpy array of float32 of shape (model_embedding_size,). If 
-    <return_partials> is True, the partial utterances as a numpy array of float32 of shape 
+    :return: the embedding as a numpy array of np.float32 of shape (model_embedding_size,). If 
+    <return_partials> is True, the partial utterances as a numpy array of np.float32 of shape 
     (n_partials, model_embedding_size) and the wav partials as a list of slices will also be 
     returned. If <using_partials> is simultaneously set to False, both these values will be None 
     instead.

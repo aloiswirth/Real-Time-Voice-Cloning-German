@@ -1,3 +1,7 @@
+The project failed because I was using python 3.10. The numpy version necessary is 1.19. as there are still numpy types np.float, np.complex, etc which are used in this project. I doid not succeed in finding all the places where np.complex was called. So after 500 steps the program for the synthesizer training stopped. 
+
+Perhaps I will have to redo all the steps at  a later point in time again with Python 3.8-
+
 ## First things first
 - Trained on female and male German voices from m-ailabs
 - Tests show that the vocoder training is not neccessary, so focus on encoder and synthesizer
@@ -41,3 +45,5 @@ Please note that all changes I did were made for windows. You might want to adap
 
 ## Todos and Learnings
 - Application for a specific voice needs fine tuning for the specific voice.
+
+

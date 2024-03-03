@@ -30,7 +30,7 @@ class SynthesizerDataset(Dataset):
             index = index[0]
 
         mel_path, embed_path = self.samples_fpaths[index]
-        mel = np.load(mel_path).T.astype(float32)
+        mel = np.load(mel_path).T.astype(np.float32)
         
         # Load the embed
         embed = np.load(embed_path)
@@ -41,7 +41,7 @@ class SynthesizerDataset(Dataset):
         # Convert the list returned by text_to_sequence to a numpy array
         text = np.asarray(text).astype(np.int32)
 
-        return text, mel.astype(float32), embed.astype(float32), index
+        return text, mel.astype(np.float32), embed.astype(np.float32), index
 
     def __len__(self):
         return len(self.samples_fpaths)

@@ -15,7 +15,7 @@ def save_wav(wav, path, sr):
     wavfile.write(path, sr, wav.astype(np.int16))
 
 def save_wavenet_wav(wav, path, sr):
-    sf.write(path, wav.astype(float32), sr)
+    sf.write(path, wav.astype(np.float32), sr)
 
 def preemphasis(wav, k, preemphasize=True):
     if preemphasize:
@@ -76,7 +76,7 @@ def inv_linear_spectrogram(linear_spectrogram, hparams):
     if hparams.use_lws:
         processor = _lws_processor(hparams)
         D = processor.run_lws(S.astype(float64).T ** hparams.power)
-        y = processor.istft(D).astype(float32)
+        y = processor.istft(D).astype(np.float32)
         return inv_preemphasis(y, hparams.preemphasis, hparams.preemphasize)
     else:
         return inv_preemphasis(_griffin_lim(S ** hparams.power, hparams), hparams.preemphasis, hparams.preemphasize)
@@ -93,7 +93,7 @@ def inv_mel_spectrogram(mel_spectrogram, hparams):
     if hparams.use_lws:
         processor = _lws_processor(hparams)
         D = processor.run_lws(S.astype(float64).T ** hparams.power)
-        y = processor.istft(D).astype(float32)
+        y = processor.istft(D).astype(np.float32)
         return inv_preemphasis(y, hparams.preemphasis, hparams.preemphasize)
     else:
         return inv_preemphasis(_griffin_lim(S ** hparams.power, hparams), hparams.preemphasis, hparams.preemphasize)
@@ -107,7 +107,7 @@ def _griffin_lim(S, hparams):
     Based on https://github.com/librosa/librosa/issues/434
     """
     angles = np.exp(2j * np.pi * np.random.rand(*S.shape))
-    S_complex = np.abs(S).astype(complex)
+    S_complex = np.abs(S).astype(np.complex128)
     y = _istft(S_complex * angles, hparams)
     for i in range(hparams.griffin_lim_iters):
         angles = np.exp(1j * np.angle(_stft(y, hparams)))

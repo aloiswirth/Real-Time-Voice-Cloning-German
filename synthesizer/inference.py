@@ -155,7 +155,7 @@ class Synthesizer:
         else:
             wav = fpath_or_wav
         
-        mel_spectrogram = audio.melspectrogram(wav, hparams).astype(float32)
+        mel_spectrogram = audio.melspectrogram(wav, hparams).astype(np.float32)
         return mel_spectrogram
     
     @staticmethod

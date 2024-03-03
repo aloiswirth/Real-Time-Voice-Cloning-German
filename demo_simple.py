@@ -71,10 +71,10 @@ if __name__ == '__main__':
 	
 	write = True
 	if write:
-		sf.write(out_path, generated_wav.astype(float32), round(synthesizer.sample_rate / 1.0))	
+		sf.write(out_path, generated_wav.astype(np.float32), round(synthesizer.sample_rate / 1.0))	
 		print("Audio file has been written.")
 
 	audio_length = librosa.get_duration(generated_wav, sr = 14545)
-	sd.play(generated_wav.astype(float32), round(synthesizer.sample_rate / 1.0))
+	sd.play(generated_wav.astype(np.float32), round(synthesizer.sample_rate / 1.0))
 	time.sleep(audio_length)
 	print("Done")

@@ -254,7 +254,7 @@ def process_utterance(wav: np.ndarray, text: str, out_dir: Path, basename: str,
         return None
     
     # Compute the mel spectrogram
-    mel_spectrogram = audio.melspectrogram(wav, hparams).astype(float32)
+    mel_spectrogram = audio.melspectrogram(wav, hparams).astype(np.float32)
     mel_frames = mel_spectrogram.shape[1]
     
     # Skip utterances that are too long

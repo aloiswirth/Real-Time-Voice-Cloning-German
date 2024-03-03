@@ -221,7 +221,7 @@ def denoise(wav, noise_profile: NoiseProfile, eta=0.15):
 def to_float(_input):
     if _input.dtype == float64:
         return _input, _input.dtype
-    elif _input.dtype == float32:
+    elif _input.dtype == np.float32:
         return _input.astype(float64), _input.dtype
     elif _input.dtype == np.uint8:
         return (_input - 128) / 128., _input.dtype
@@ -235,8 +235,8 @@ def to_float(_input):
 def from_float(_input, dtype):
     if dtype == float64:
         return _input, float64
-    elif dtype == float32:
-        return _input.astype(float32)
+    elif dtype == np.float32:
+        return _input.astype(np.float32)
     elif dtype == np.uint8:
         return ((_input * 128) + 128).astype(np.uint8)
     elif dtype == np.int16:
